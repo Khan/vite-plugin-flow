@@ -47,7 +47,12 @@ module.exports.flowPlugin = function flowPlugin(options = {
         const transformed = flowRemoveTypes(src, options.flow);
         return {
           code: transformed.toString(),
-          map: transformed.generateMap(),
+          // flow-remove-types sets sources to ['source.js'].  This is no configurable.
+          // As a result all transpiled files map to the same file which is confusing.
+          // Fixing this for real would require making hcanges to flow-remove-types itself.
+          // Since ViteJS's transpilation changes are minimal, debugging the code it outputs
+          // it is good enough for now.
+          map: null,
         };
       }
     },
